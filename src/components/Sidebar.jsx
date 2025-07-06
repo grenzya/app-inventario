@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { FaHome, FaBoxes, FaTruck } from "react-icons/fa";
 
 function Sidebar({ isOpen, onClose }) {
   return (
@@ -9,11 +10,11 @@ function Sidebar({ isOpen, onClose }) {
         left: isOpen ? 0 : "-250px",
         width: "250px",
         height: "100%",
-        background: "#222",
-        color: "#fff",
-        paddingTop: "60px",
+        background: "#E5E5E5", // Fondo gris claro
+        paddingTop: "80px",
         transition: "left 0.3s",
         zIndex: 1000,
+        boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.25)",
       }}
     >
       <button
@@ -23,29 +24,72 @@ function Sidebar({ isOpen, onClose }) {
           top: "10px",
           right: "10px",
           fontSize: "20px",
+          background: "transparent",
+          border: "none",
+          color: "#333",
+          cursor: "pointer",
         }}
       >
         ✕
       </button>
-      <ul style={{ listStyle: "none", padding: "20px" }}>
-        <li>
-          <NavLink to="/" style={{ color: "#fff", textDecoration: "none" }}>
+
+      <ul style={{ listStyle: "none", padding: "0 20px" }}>
+        <li style={{ marginBottom: "20px" }}>
+          <NavLink
+            to="/"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              padding: "10px 20px",
+              background: "#FFFFFF",
+              borderRadius: "9999px",
+              textDecoration: "none",
+              color: "#267C33",
+              boxShadow: "2px 2px 4px rgba(0,0,0,0.25)",
+              fontWeight: "500",
+            }}
+          >
+            <FaHome style={{ marginRight: "10px" }} />
             Inicio
           </NavLink>
         </li>
-        <li>
+
+        <li style={{ marginBottom: "20px" }}>
           <NavLink
             to="/productos"
-            style={{ color: "#fff", textDecoration: "none" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              padding: "10px 20px",
+              background: "#FFFFFF",
+              borderRadius: "9999px",
+              textDecoration: "none",
+              color: "#267C33",
+              boxShadow: "2px 2px 4px rgba(0,0,0,0.25)",
+              fontWeight: "500",
+            }}
           >
+            <FaBoxes style={{ marginRight: "10px" }} />
             Productos
           </NavLink>
         </li>
+
         <li>
           <NavLink
             to="/proveedores"
-            style={{ color: "#fff", textDecoration: "none" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              padding: "10px 20px",
+              background: "#FFFFFF",
+              borderRadius: "9999px",
+              textDecoration: "none",
+              color: "#267C33",
+              boxShadow: "2px 2px 4px rgba(0,0,0,0.25)",
+              fontWeight: "500",
+            }}
           >
+            <FaTruck style={{ marginRight: "10px" }} />
             Proveedores
           </NavLink>
         </li>
