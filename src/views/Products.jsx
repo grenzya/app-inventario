@@ -4,6 +4,7 @@ import {
   getCoreRowModel,
   flexRender,
 } from "@tanstack/react-table";
+import Modal from "@/components/Modal";
 
 function Productos() {
   const [productos] = useState([
@@ -34,6 +35,8 @@ function Productos() {
       barcode: "987654321098",
     },
   ]);
+
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const columns = useMemo(
     () => [
@@ -67,13 +70,14 @@ function Productos() {
         header: "Info",
         cell: (info) => (
           <button
-            onClick={() => alert(info.row.original.informacion)}
+            onClick={() => setSelectedProduct(info.row.original)}
             style={{
               background: "#0288d1",
               color: "white",
               border: "none",
               padding: "5px 8px",
               borderRadius: "5px",
+              cursor: "pointer",
             }}
           >
             i
@@ -93,6 +97,7 @@ function Productos() {
               border: "none",
               padding: "5px 8px",
               borderRadius: "5px",
+              cursor: "pointer",
             }}
           >
             📦
@@ -110,63 +115,67 @@ function Productos() {
   });
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Productos</h2>
-      <table
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          background: "#49BA70",
-          borderRadius: "10px",
-          overflow: "hidden",
-        }}
-      >
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  style={{
-                    padding: "12px",
-                    background: "#2e7d32",
-                    color: "#fff",
-                    textAlign: "left",
-                    borderBottom: "2px solid #fff",
-                  }}
-                >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              style={{
-                background: "#e8f5e9",
-              }}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  style={{
-                    padding: "10px",
-                    borderBottom: "1px solid #c8e6c9",
-                  }}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+      <div style={{ flex: 1, overflow: "auto" }}>
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            background: "#49BA70",
+            borderRadius: "10px",
+            overflow: "hidden",
+          }}
+        >
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    style={{
+                      padding: "12px",
+                      background: "#2e7d32",
+                      color: "#fff",
+                      textAlign: "left",
+                      borderBottom: "2px solid #fff",
+                    }}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id} style={{ background: "#e8f5e9" }}>
+                {row.getVisibleCells().map((cell) => (
+                  <td
+                    key={cell.id}
+                    style={{
+                      padding: "10px",
+                      borderBottom: "1px solid #c8e6c9",
+                    }}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Modal */}
+      <Modal
+        visible={!!selectedProduct}
+        title="Información"
+        data={selectedProduct || {}}
+        onClose={() => setSelectedProduct(null)}
+      />
     </div>
   );
 }
