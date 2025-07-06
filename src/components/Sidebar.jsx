@@ -10,13 +10,14 @@ function Sidebar({ isOpen, onClose }) {
         left: isOpen ? 0 : "-250px",
         width: "250px",
         height: "100%",
-        background: "#E5E5E5", // Fondo gris claro
+        background: "#E5E5E5",
         paddingTop: "80px",
-        transition: "left 0.3s",
+        transition: "left 0.35s",
         zIndex: 1000,
         boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.25)",
       }}
     >
+      {/* Botón de Cerrar */}
       <button
         onClick={onClose}
         style={{
@@ -41,10 +42,10 @@ function Sidebar({ isOpen, onClose }) {
               display: "flex",
               alignItems: "center",
               padding: "10px 20px",
-              background: "#FFFFFF",
+              background: "#75D797",
               borderRadius: "9999px",
               textDecoration: "none",
-              color: "#267C33",
+              color: "#000000",
               boxShadow: "2px 2px 4px rgba(0,0,0,0.25)",
               fontWeight: "500",
             }}
@@ -61,10 +62,10 @@ function Sidebar({ isOpen, onClose }) {
               display: "flex",
               alignItems: "center",
               padding: "10px 20px",
-              background: "#FFFFFF",
+              background: "#75D797",
               borderRadius: "9999px",
               textDecoration: "none",
-              color: "#267C33",
+              color: "#000000",
               boxShadow: "2px 2px 4px rgba(0,0,0,0.25)",
               fontWeight: "500",
             }}
@@ -81,10 +82,10 @@ function Sidebar({ isOpen, onClose }) {
               display: "flex",
               alignItems: "center",
               padding: "10px 20px",
-              background: "#FFFFFF",
+              background: "#75D797",
               borderRadius: "9999px",
               textDecoration: "none",
-              color: "#267C33",
+              color: "#000000",
               boxShadow: "2px 2px 4px rgba(0,0,0,0.25)",
               fontWeight: "500",
             }}

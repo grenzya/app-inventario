@@ -29,7 +29,7 @@ function AppContent() {
   };
 
   return (
-    <>
+    <div className="main-content">
       <Header onToggleSidebar={() => setSidebarOpen(true)} title={getTitle()} />
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div style={{ padding: "20px", marginTop: "60px" }}>
@@ -39,7 +39,7 @@ function AppContent() {
           <Route path="/proveedores" element={<Proveedores />} />
         </Routes>
       </div>
-    </>
+    </div>
   );
 }
 
