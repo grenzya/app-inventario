@@ -233,13 +233,15 @@ const imprimirCodigo = () => {
 }
 
 function Productos() {
+  const [mensajeError, setMensajeError] = useState("");
   const [globalFilter, setGlobalFilter] = useState("");
   const [modalAgregarVisible, setModalAgregarVisible] = useState(false);
   const [editModal, setEditModal] = useState({ visible: false, producto: null });
   const [modalEliminar, setModalEliminar] = useState({
   visible: false,
   producto: null
-});
+  });
+  const [codigoBarraInput, setCodigoBarraInput] = useState("");
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -265,6 +267,7 @@ function Productos() {
         const datos = await apiService.getProductos();
         setProductos(datos);
         
+        
       } catch (error) {
         setError(error.message);
       } finally {
@@ -274,6 +277,28 @@ function Productos() {
 
     cargarProductos();
   }, []);
+    useEffect(() => {
+  const cargarProductos = async () => {
+    setLoading(true);
+    try {
+      const datos = await apiService.getProductos();
+      setProductos(datos);
+      table.setGlobalFilter("");
+      table.setPageIndex(0);
+      setMensajeError("");
+    } catch (error) {
+      setMensajeError("Error al cargar productos");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (codigoBarraInput.trim() === "") {
+    cargarProductos();
+  }
+}, [codigoBarraInput]);
+
+
 
   const columns = useMemo(
     () => [
@@ -503,50 +528,51 @@ function Productos() {
         flexWrap: "wrap",
         flexShrink: 0,
         minHeight: "70px"
-      }}>
-         <input
-          type="text"
-          placeholder="🔍 Buscar producto..."
-          value={table.getState().globalFilter ?? ""}
-          onChange={(e) => table.setGlobalFilter(e.target.value)}
-          style={{
-            padding: "10px 15px",
-            borderRadius: "6px",
-            border: "1px solid #ccc",
-            fontSize: "14px",
-            minWidth: "250px",
-            outline: "none"
-          }}
-        />
+        }}>
         <input
           type="text"
-          placeholder="🔍 Buscar por código de barras..."
+          placeholder="🔍 Buscar por código de barras o texto…"
           value={codigoBarraInput}
-          onChange={(e) => setCodigoBarraInput(e.target.value)}
+          onChange={(e) => {
+            setCodigoBarraInput(e.target.value);
+            setMensajeError("");         
+          }}
           onKeyDown={async (e) => {
-            if (e.key === 'Enter') {
+            if (e.key === "Enter") {
+              const valor = codigoBarraInput.trim();
+              if (valor === "") return;   
+
               try {
-                const res = await fetch(`http://localhost:3000/producto/getToBarCode/${encodeURIComponent(codigoBarraInput)}`);
-                if (!res.ok) throw new Error("Producto no encontrado");
-                const producto = await res.json();
-                setProductos([producto]); // Muestra solo ese producto
+                const soloDigitos = /^[0-9]+$/.test(valor);
+                let data;
+
+                if (soloDigitos) {
+                  const res = await fetch(
+                    `http://localhost:3000/producto/getToBarCode/${encodeURIComponent(valor)}`
+                  );
+
+                  if (res.status === 404) throw new Error("🔍 Código no encontrado");
+                  if (!res.ok) throw new Error("Error en el servidor");
+
+                  data = await res.json();
+                  setProductos([data]);
+                  table.setPageIndex(0);
+                } else {
+                  table.setGlobalFilter(valor);
+                }
+                setMensajeError("");
               } catch (err) {
-                alert(err.message);
+                setMensajeError(err.message);
+                setCodigoBarraInput("");
+                const todos = await apiService.getProductos();
+                setProductos(todos);
               }
             }
           }}
-          style={{
-            padding: "10px 15px",
-            borderRadius: "6px",
-            border: "1px solid #ccc",
-            fontSize: "14px",
-            minWidth: "250px",
-            outline: "none"
-          }}
         />
-
-
-
+        {mensajeError && (
+          <span style={{ color: "#ffeb3b", fontWeight: 600 }}>{mensajeError}</span>
+        )}
         <div style={{ color: "white", fontSize: "14px", fontWeight: "500" }}>
           Mostrando {productos.length === 0 ? 0 : table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} - {" "}
           {Math.min(

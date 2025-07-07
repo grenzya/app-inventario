@@ -5,30 +5,49 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 
-function Suppliers() {
-  const [proveedores] = useState([
-    {
-      codigo: "SUP001",
-      nombre: "Ferretería Industrial",
-      pais: "Chile",
-      contacto: "Juan Pérez",
-      telefono: "+56 9 1234 5678",
-      correo: "juan@ferreteria.cl",
-      estado: "Activo",
-      informacion: "Proveedor de herramientas industriales",
-    },
-    {
-      codigo: "SUP002",
-      nombre: "Seguridad Max",
-      pais: "Perú",
-      contacto: "María López",
-      telefono: "+51 987 654 321",
-      correo: "maria@seguridadmax.pe",
-      estado: "Activo",
-      informacion: "Distribuidor de implementos de seguridad personal",
-    },
-  ]);
+const API_BASE_URL = "http://localhost:3000";
 
+const apiService = {
+  async getProveedores() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/proveedor/all`);
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error al obtener productos:", error);
+      throw error;
+    }
+  },
+
+};
+function Suppliers() {
+  const [proveedor, setProveedor] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+
+  useEffect(() => {
+      const cargarProveedor = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+          
+          const datos = await apiService.getProveedores();
+          setProductos(datos);
+          
+          
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      cargarProveedor();
+    }, []);
+  
   const columns = useMemo(
     () => [
       { header: "Código", accessorKey: "codigo" },
