@@ -435,10 +435,6 @@ function Productos() {
     columns,
     state: {
       globalFilter,                     // ← aquí va tu useState
-      pagination: {
-        pageIndex: 0,
-        pageSize: 15,
-      },
     },
     onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
