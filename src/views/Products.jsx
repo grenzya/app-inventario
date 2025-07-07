@@ -13,8 +13,19 @@ import {
 } from "@tanstack/react-table";
 import Modal from "@/components/Modal";
 
-
-
+import {
+  MdArrowBack,
+  MdArrowForward,
+  MdFirstPage,
+  MdLastPage,
+  MdAdd,
+  MdDelete,
+  MdEdit,
+  MdPrint,
+  MdInfo,
+  MdClose,
+  MdGridOn,
+} from "react-icons/md";
 const API_BASE_URL = "http://localhost:3000";
 
 const apiService = {
@@ -204,7 +215,7 @@ function BarcodeModal({ visible, onClose, barCodeId, titulo }) {
               cursor: "pointer",
             }}
           >
-            🖨️ Imprimir
+            <MdPrint size={20} />
           </button>
           
           <button
@@ -218,7 +229,7 @@ function BarcodeModal({ visible, onClose, barCodeId, titulo }) {
               cursor: "pointer",
             }}
           >
-            Cerrar
+            <MdClose size={20} />
           </button>
         </div>
       </div>
@@ -316,12 +327,12 @@ function Productos() {
               background: "#0288d1",
               color: "white",
               border: "none",
-              padding: "5px 8px",
-              borderRadius: "5px",
+              padding: "10px",
+              borderRadius: "20px",
               cursor: "pointer",
             }}
           >
-            i
+            <MdInfo size={30} />
           </button>
         ),
       },
@@ -339,15 +350,14 @@ function Productos() {
               }
                 style={{
                   background: "#ff9800",
-                  color: "#fff",
-                  border: "none",
-                  padding: "6px 10px",
-                  borderRadius: 4,
-                  cursor: "pointer",
-                  fontSize: 12,
-                  }}
-              >
-                  ✏️
+                  color: "white",
+              border: "none",
+              padding: "10px",
+              borderRadius: "20px",
+              cursor: "pointer",
+            }}
+          >
+            <MdEdit size={30} />
               </button>
               <button
                 onClick={() =>
@@ -355,15 +365,14 @@ function Productos() {
                 }
                 style={{
                   background: "#e53935",
-                  color: "#fff",
-                  border: "none",
-                  padding: "6px 10px",
-                  borderRadius: 4,
-                  cursor: "pointer",
-                  fontSize: 12,
-                }}
-              >
-                🗑️
+                  color: "white",
+                  padding: "10px",
+              border: "none",
+              borderRadius: "20px",
+              cursor: "pointer",
+            }}
+          >
+            <MdDelete size={30} />
               </button>
             </div>
           )
@@ -381,14 +390,14 @@ function Productos() {
             })}
             style={{
               background: "#43a047",
-              color: "black",
+              color: "white",
               border: "none",
-              padding: "5px 8px",
-              borderRadius: "5px",
+              padding: "10px",
+              borderRadius: "20px",
               cursor: "pointer",
             }}
           >
-            📦
+            <MdGridOn size={30} />
           </button>
         ),
       },
@@ -449,7 +458,6 @@ function Productos() {
       width: "100vw",
       display: "flex",
       flexDirection: "column",
-      overflow: "hidden"
     }}>
 
       <div style={{
@@ -466,7 +474,7 @@ function Productos() {
         margin: "0 20px",
       }}>
         
-        <div style={{ color: "white", marginRight: "40px", fontSize: "14px", fontWeight: "500" }}>
+        <div style={{ color: "white", marginRight: "40px", fontSize: "20px", fontWeight: "500" }}>
           Mostrando {productos.length === 0 ? 0 : table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} - {" "}
           {Math.min(
             (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
@@ -484,12 +492,14 @@ function Productos() {
             border: "none",
             borderRadius: "6px",
             cursor: table.getCanPreviousPage() ? "pointer" : "not-allowed",
-            fontSize: "14px",
-            fontWeight: "600",
-            minWidth: "100px"
-          }}
-        >
-          Primera
+            color: "white",
+              border: "none",
+              padding: "10px",
+              borderRadius: "20px",
+              cursor: "pointer",
+            }}
+          >
+            <MdFirstPage size={30} />
         </button>
         
         <button
@@ -502,21 +512,23 @@ function Productos() {
             border: "none",
             borderRadius: "6px",
             cursor: table.getCanPreviousPage() ? "pointer" : "not-allowed",
-            fontSize: "14px",
-            fontWeight: "600",
-            minWidth: "100px"
-          }}
-        >
-          Anterior
+            color: "white",
+              border: "none",
+              padding: "10px",
+              borderRadius: "20px",
+              cursor: "pointer",
+            }}
+          >
+            <MdArrowBack size={30} />
         </button>
 
         <div style={{
           color: "white",
-          fontSize: "14px",
+          fontSize: "20px",
           fontWeight: "600",
-          padding: "10px 15px",
+          padding: "15px",
           backgroundColor: "rgba(255,255,255,0.2)",
-          borderRadius: "6px",
+          borderRadius: "20px",
           minWidth: "150px",
           textAlign: "center"
         }}>
@@ -533,12 +545,14 @@ function Productos() {
             border: "none",
             borderRadius: "6px",
             cursor: table.getCanNextPage() ? "pointer" : "not-allowed",
-            fontSize: "14px",
-            fontWeight: "600",
-            minWidth: "100px"
-          }}
-        >
-          Siguiente
+            color: "white",
+              border: "none",
+              padding: "10px",
+              borderRadius: "20px",
+              cursor: "pointer",
+            }}
+          >
+            <MdArrowForward size={30} />
         </button>
         
         <button
@@ -551,22 +565,24 @@ function Productos() {
             border: "none",
             borderRadius: "6px",
             cursor: table.getCanNextPage() ? "pointer" : "not-allowed",
-            fontSize: "14px",
-            fontWeight: "600",
-            minWidth: "100px"
-          }}
-        >
-          Última
+            color: "white",
+              border: "none",
+              padding: "10px",
+              borderRadius: "20px",
+              cursor: "pointer",
+            }}
+          >
+            <MdLastPage size={30} />
         </button>
 
         <select
           value={table.getState().pagination.pageSize}
           onChange={(e) => table.setPageSize(Number(e.target.value))}
           style={{
-            padding: "10px 12px",
-            borderRadius: "6px",
+            padding: "15px",
+            borderRadius: "20px",
             border: "1px solid #ddd",
-            fontSize: "14px",
+            fontSize: "20px",
             fontWeight: "600"
           }}
         >
@@ -582,16 +598,13 @@ function Productos() {
         style={{
           backgroundColor: "#66bb6a",
           color: "white",
-          padding: "10px 10px",
-          border: "none",
-          marginLeft: "40px",
-          borderRadius: "30px",
-          cursor: "pointer",
-          fontSize: "14px",
-          fontWeight: "bold"
-        }}
-      >
-        ➕
+              border: "none",
+              padding: "10px",
+              borderRadius: "20px",
+              cursor: "pointer",
+            }}
+          >
+            <MdAdd size={30} />
       </button>
       </div>
 
@@ -627,7 +640,7 @@ function Productos() {
                       color: "#fff",
                       textAlign: "left",
                       fontWeight: "bold",
-                      fontSize: "20px",
+                      fontSize: "24px",
                       width: "100%",
                     }}
                   >
@@ -646,6 +659,7 @@ function Productos() {
                 <td colSpan={columns.length} style={{ 
                   textAlign: "center",
                   padding: "40px",
+                  fontSize: "20px",
                    }}>
                   No hay productos para mostrar
                 </td>
@@ -663,6 +677,7 @@ function Productos() {
                       boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.15)",
                       borderRadius: "26px",
                       overflow: "hidden",
+                      fontSize: "20px",
                     }}
                   >
                     {row.getVisibleCells().map((cell, cellIndex) => (

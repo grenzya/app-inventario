@@ -41,6 +41,7 @@ function Sidebar({ isOpen, onClose }) {
             style={{
               display: "flex",
               alignItems: "center",
+              justifyContent: "center",
               padding: "10px 20px",
               background: "#75D797",
               borderRadius: "9999px",
@@ -61,6 +62,7 @@ function Sidebar({ isOpen, onClose }) {
             style={{
               display: "flex",
               alignItems: "center",
+              justifyContent: "center",
               padding: "10px 20px",
               background: "#75D797",
               borderRadius: "9999px",
@@ -81,6 +83,7 @@ function Sidebar({ isOpen, onClose }) {
             style={{
               display: "flex",
               alignItems: "center",
+              justifyContent: "center",
               padding: "10px 20px",
               background: "#75D797",
               borderRadius: "9999px",

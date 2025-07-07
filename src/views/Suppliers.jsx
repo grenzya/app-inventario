@@ -66,7 +66,8 @@ function Suppliers() {
   });
 
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+    <div style={{ height: "100vh",
+      width: "100vw", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1, overflow: "auto" }}>
         <table
           style={{

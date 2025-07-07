@@ -29,6 +29,7 @@ function Modal({ visible, title, data, onClose }) {
           style={{
             marginTop: 0,
             textAlign: "center",
+            justifyContent: "center",
             fontSize: "30px",
             color: "#FFFFFF",
           }}
