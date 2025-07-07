@@ -1,4 +1,4 @@
-function Header({ onToggleSidebar }) {
+function Header({ onToggleSidebar, title = "Inicio" }) {
   return (
     <header
       style={{
@@ -9,28 +9,53 @@ function Header({ onToggleSidebar }) {
         height: "60px",
         display: "flex",
         alignItems: "center",
-        padding: "10px 20px",
         background: "#FFFFFF",
-        color: "#000000", // Cambiado a negro
-        zIndex: 1000,
+        color: "#000000",
         boxSizing: "border-box",
+        borderBottom: "4px solid #4CAF50", // Línea verde
       }}
     >
       <button
         onClick={onToggleSidebar}
         style={{
-          marginRight: "10px",
-          fontSize: "22px",
+          marginRight: "15px",
+          fontSize: "26px",
           background: "transparent",
           border: "none",
           color: "#000000",
-          cursor: "pointer",
         }}
       >
         ☰
       </button>
-      <h1 style={{ margin: 0, fontSize: "20px", color: "#000000" }}>
-        App Inventario
+
+      {/* Logo */}
+      <img
+        src="src/assets/logo2.png"
+        alt="Logo"
+        style={{
+          height: "45px",
+          marginRight: "20px",
+        }}
+      />
+
+      {/* Separador vertical */}
+      <div
+        style={{
+          height: "100%",
+          borderLeft: "1px solid #CCCCCC",
+          marginRight: "20px",
+        }}
+      ></div>
+
+      {/* Título */}
+      <h1
+        style={{
+          margin: 0,
+          fontSize: "32px",
+          fontWeight: "500",
+        }}
+      >
+        {title}
       </h1>
     </header>
   );
