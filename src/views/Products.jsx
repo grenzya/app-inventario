@@ -251,6 +251,7 @@ function Productos() {
     barCodeId: null,
     titulo: ""
   });
+  const [codigoBarraInput, setCodigoBarraInput] = useState("");
   const handleProductoGuardado = (productoActualizado) => {
   setProductos((prev) =>
     prev.map((p) =>
