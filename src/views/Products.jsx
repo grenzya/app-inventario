@@ -248,6 +248,7 @@ function Productos() {
   visible: false,
   producto: null
 });
+  const [mensajeError, setMensajeError] = useState("");
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -284,23 +285,20 @@ function Productos() {
   }, []);
 
   useEffect(() => {
-  const cargarProductos = async () => {
-    setLoading(true);
+  const cargarTodosLosProductos = async () => {
     try {
-      const datos = await apiService.getProductos();
-      setProductos(datos);
+      const todos = await apiService.getProductos();
+      setProductos(todos);
       table.setGlobalFilter("");
       table.setPageIndex(0);
       setMensajeError("");
     } catch (error) {
       setMensajeError("Error al cargar productos");
-    } finally {
-      setLoading(false);
     }
   };
 
   if (codigoBarraInput.trim() === "") {
-    cargarProductos();
+    cargarTodosLosProductos();
   }
 }, [codigoBarraInput]);
 
