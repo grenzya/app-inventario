@@ -67,24 +67,26 @@ export default function EditarProductoModal({ visible, producto, onClose, onSave
         alignItems: "center",
         justifyContent: "center",
         zIndex: 1000,
+
       }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          backgroundColor: "#e8f5e9",
+          backgroundColor: "black",
           padding: "30px",
-          borderRadius: "10px",
-          width: "400px",
+          borderRadius: "40px",
+          maxWidth: "400px",
+          width: "100%",
           boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
         }}
       >
-        <h2 style={{ marginTop: 0, color: "#2e7d32", textAlign: "center" }}>
-          ✏️ Editar Producto
-        </h2>
+        <h3 style={{ marginBottom: "20px", color: "#FFFFFF", textAlign: "center", fontSize: "24px" }}>
+          Editar Producto
+        </h3>
 
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ fontWeight: 600, color: "#2e7d32" }}>Nombre:</label>
+          <label style={{ fontWeight: "bold", color: "#2e7d32", fontSize: "18px" }}>Nombre:</label>
           <input
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
@@ -93,7 +95,7 @@ export default function EditarProductoModal({ visible, producto, onClose, onSave
         </div>
 
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ fontWeight: 600, color: "#2e7d32" }}>Stock:</label>
+          <label style={{ fontWeight: "bold", color: "#2e7d32", fontSize: "18px" }}>Stock:</label>
           <input
             type="number"
             value={stock}
@@ -104,7 +106,7 @@ export default function EditarProductoModal({ visible, producto, onClose, onSave
         </div>
 
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ fontWeight: 600, color: "#2e7d32" }}>Precio:</label>
+<label style={{ fontWeight: "bold", color: "#2e7d32", fontSize: "18px" }}>Precio:</label>
           <input
             type="number"
             value={precio}
@@ -120,12 +122,12 @@ export default function EditarProductoModal({ visible, producto, onClose, onSave
           </div>
         )}
 
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: "60px", marginTop: "20px" }}>
           <button style={cancelButtonStyle} onClick={onClose}>
-            ❌ Cancelar
+            Cancelar
           </button>
           <button style={saveButtonStyle} onClick={guardarCambios}>
-            💾 Guardar
+            Guardar
           </button>
         </div>
       </div>
@@ -135,31 +137,30 @@ export default function EditarProductoModal({ visible, producto, onClose, onSave
 
 const inputStyle = {
   width: "100%",
-  padding: "8px",
-  borderRadius: "5px",
+  padding: "15px 20px",
+  borderRadius: "6px",
   border: "1px solid #ccc",
   marginTop: "4px",
-  fontSize: "14px",
+  fontSize: "16px",
+  boxSizing: "border-box",
 };
 
 const cancelButtonStyle = {
-  backgroundColor: "#b71c1c",
+  padding: "10px 20px",
+  backgroundColor: "#9e9e9e",
   color: "white",
   border: "none",
-  padding: "10px 18px",
-  borderRadius: "6px",
+  borderRadius: "15px",
   cursor: "pointer",
-  fontWeight: "bold",
-  fontSize: "14px",
+  fontSize: "20px",
 };
 
 const saveButtonStyle = {
-  backgroundColor: "#2e7d32",
+  padding: "15px 20px",
+  backgroundColor: "#4caf50",
   color: "white",
   border: "none",
-  padding: "10px 18px",
-  borderRadius: "6px",
+  borderRadius: "15px",
   cursor: "pointer",
-  fontWeight: "bold",
-  fontSize: "14px",
+  fontSize: "20px",
 };

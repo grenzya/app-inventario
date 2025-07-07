@@ -21,19 +21,18 @@ function EliminarProductoModal({ visible, producto, onClose, onConfirm }) {
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          backgroundColor: "white",
+          backgroundColor: "black",
           padding: "30px",
-          borderRadius: "10px",
-          maxWidth: "90%",
-          maxHeight: "90%",
+          borderRadius: "40px",
+          maxWidth: "400px",
+          width: "100%",
           boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
-          textAlign: "center",
         }}
       >
-        <h3 style={{ marginBottom: "20px", color: "#e53935" }}>
+        <h3 style={{ marginBottom: "20px", color: "#e53935", textAlign: "center", fontSize: "24px" }}>
           ¿Actualizar estado?
         </h3>
-        <p style={{ fontSize: "16px", color: "#333" }}>
+        <p style={{ justifyContent: "center", alignSelf: "center",fontSize: "18px", color: "#FFFFFF" }}>
           Estás a punto de actualizar el estado de <strong>{producto.nombre}</strong>.
         </p>
         
@@ -46,25 +45,27 @@ function EliminarProductoModal({ visible, producto, onClose, onConfirm }) {
               backgroundColor: "#9e9e9e",
               color: "white",
               border: "none",
-              borderRadius: "5px",
+              borderRadius: "15px",
               cursor: "pointer",
+              fontSize: "20px",
             }}
           >
-            ❌ Cancelar
+            Cancelar
           </button>
 
           <button
             onClick={() => onConfirm(producto.productoId)}
             style={{
-              padding: "10px 20px",
+              padding: "15px 20px",
               backgroundColor: "#e53935",
               color: "white",
               border: "none",
-              borderRadius: "5px",
+              borderRadius: "15px",
               cursor: "pointer",
+              fontSize: "20px",
             }}
           >
-            🗑️ Eliminar
+            Eliminar
           </button>
         </div>
       </div>

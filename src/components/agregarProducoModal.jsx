@@ -73,16 +73,16 @@ function AgregarProductoModal({ visible, onClose, onAgregar }) {
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          backgroundColor: "white",
+          backgroundColor: "black",
           padding: "30px",
-          borderRadius: "10px",
+          borderRadius: "40px",
           maxWidth: "400px",
           width: "100%",
           boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
         }}
       >
-        <h3 style={{ marginBottom: "20px", color: "#2e7d32", textAlign: "center" }}>
-          ➕ Agregar Producto
+        <h3 style={{ marginBottom: "20px", color: "#FFFFFF", textAlign: "center", fontSize: "24px" }}>
+        Agregar Producto
         </h3>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -92,35 +92,35 @@ function AgregarProductoModal({ visible, onClose, onAgregar }) {
             placeholder="Nombre"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            style={{ padding: "10px", borderRadius: "6px", border: "1px solid #ccc" }}
+            style={{ boxSizing: "border-box",padding: "15px 20px", borderRadius: "6px", border: "1px solid #ccc", fontSize: "16px" }}
           />
           <input
             type="text"
             placeholder="Categoria"
             value={category}
             onChange={(e)=> setCategory(e.target.value)}
-            style={{ padding: "10px", borderRadius: "6px", border: "1px solid #ccc" }}
+            style={{ boxSizing: "border-box",padding: "15px 20px", borderRadius: "6px", border: "1px solid #ccc", fontSize: "16px" }}
           />
           <input
             type="text"
             placeholder="Empresa"
             value={brand}
             onChange={(e)=> setBrand(e.target.value)}
-            style={{ padding: "10px", borderRadius: "6px", border: "1px solid #ccc" }}
+            style={{ boxSizing: "border-box", padding: "15px 20px", borderRadius: "6px", border: "1px solid #ccc", fontSize: "16px" }}
           />
           <input
             type="text"
             placeholder="Pais"
             value={country}
             onChange={(e)=> setCountry(e.target.value)}
-            style={{ padding: "10px", borderRadius: "6px", border: "1px solid #ccc" }}
+style={{  boxSizing: "border-box",padding: "15px 20px", borderRadius: "6px", border: "1px solid #ccc", fontSize: "16px" }}
           />
           <input
             type="text"
             placeholder="Caracteristicas"
             value={characteristics}
             onChange={(e)=> setCharacteristics(e.target.value)}
-            style={{ padding: "10px", borderRadius: "6px", border: "1px solid #ccc" }}
+style={{ boxSizing: "border-box", padding: "15px 20px", borderRadius: "6px", border: "1px solid #ccc", fontSize: "16px" }}
           />
           <input
             type="number"
@@ -128,7 +128,7 @@ function AgregarProductoModal({ visible, onClose, onAgregar }) {
             value={stock}
             min={0}
             onChange={(e) => setStock(e.target.value)}
-            style={{ padding: "10px", borderRadius: "6px", border: "1px solid #ccc" }}
+style={{ boxSizing: "border-box", padding: "15px 20px", borderRadius: "6px", border: "1px solid #ccc", fontSize: "16px" }}
           />
           <input
             type="number"
@@ -136,11 +136,11 @@ function AgregarProductoModal({ visible, onClose, onAgregar }) {
             value={price}
             min={0}
             onChange={(e) => setPrice(e.target.value)}
-            style={{ padding: "10px", borderRadius: "6px", border: "1px solid #ccc" }}
+style={{ boxSizing: "border-box", padding: "15px 20px", borderRadius: "6px", border: "1px solid #ccc", fontSize: "16px" }}
           />
         </div>
 
-        <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginTop: "20px" }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: "60px", marginTop: "20px" }}>
           <button
             onClick={onClose}
             style={{
@@ -148,24 +148,26 @@ function AgregarProductoModal({ visible, onClose, onAgregar }) {
               backgroundColor: "#9e9e9e",
               color: "white",
               border: "none",
-              borderRadius: "5px",
+              borderRadius: "15px",
               cursor: "pointer",
+              fontSize: "20px",
             }}
           >
-            ❌ Cancelar
+            Cancelar
           </button>
           <button
             onClick={handleSubmit}
             style={{
-              padding: "10px 20px",
+              padding: "15px 20px",
               backgroundColor: "#4caf50",
               color: "white",
               border: "none",
-              borderRadius: "5px",
+              borderRadius: "15px",
               cursor: "pointer",
+              fontSize: "20px",
             }}
           >
-            💾 Guardar
+            Guardar
           </button>
         </div>
       </div>
