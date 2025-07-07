@@ -6,6 +6,7 @@ import AgregarProductoModal from "@/components/agregarProducoModal";
 
 
 import {
+  getFilteredRowModel,  
   useReactTable,
   getCoreRowModel,
   getPaginationRowModel,
@@ -25,6 +26,7 @@ import {
   MdInfo,
   MdClose,
   MdGridOn,
+  MdSearch 
 } from "react-icons/md";
 const API_BASE_URL = "http://localhost:3000";
 
@@ -238,6 +240,8 @@ function BarcodeModal({ visible, onClose, barCodeId, titulo }) {
 }
 
 function Productos() {
+  const [codigoBarraInput, setCodigoBarraInput] = useState("");
+  const [globalFilter, setGlobalFilter] = useState("");
   const [modalAgregarVisible, setModalAgregarVisible] = useState(false);
   const [editModal, setEditModal] = useState({ visible: false, producto: null });
   const [modalEliminar, setModalEliminar] = useState({
@@ -278,6 +282,27 @@ function Productos() {
 
     cargarProductos();
   }, []);
+
+  useEffect(() => {
+  const cargarProductos = async () => {
+    setLoading(true);
+    try {
+      const datos = await apiService.getProductos();
+      setProductos(datos);
+      table.setGlobalFilter("");
+      table.setPageIndex(0);
+      setMensajeError("");
+    } catch (error) {
+      setMensajeError("Error al cargar productos");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (codigoBarraInput.trim() === "") {
+    cargarProductos();
+  }
+}, [codigoBarraInput]);
 
   const columns = useMemo(
     () => [
@@ -408,6 +433,15 @@ function Productos() {
   const table = useReactTable({
     data: productos,
     columns,
+    state: {
+      globalFilter,                     // ← aquí va tu useState
+      pagination: {
+        pageIndex: 0,
+        pageSize: 15,
+      },
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
@@ -473,15 +507,72 @@ function Productos() {
         padding: "20px",
         margin: "0 20px",
       }}>
-        
-        <div style={{ color: "white", marginRight: "40px", fontSize: "20px", fontWeight: "500" }}>
-          Mostrando {productos.length === 0 ? 0 : table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} - {" "}
-          {Math.min(
-            (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
-            productos.length
-          )} de {productos.length}
-        </div>
+        <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",            // separación entre ícono e input
+    padding: "20px 25px",
+    borderRadius: "30px",
+    border: "1px solid #ccc",
+    backgroundColor: "#ffffff",
+    boxShadow: "0 2px 3px rgba(0,0,0,0.09)",
+    minWidth: "400git px",
+  }}
+>
+  <MdSearch style={{ fontSize: "20px", color: "#555" }} />
 
+  <input
+    type="text"
+    placeholder="Ingresa una clave para buscar..."
+    value={codigoBarraInput}
+    onChange={(e) => {
+      setCodigoBarraInput(e.target.value);
+      setMensajeError("");
+    }}
+    onKeyDown={async (e) => {
+            if (e.key === "Enter") {
+              const valor = codigoBarraInput.trim();
+              if (valor === "") return;   
+
+              try {
+                const soloDigitos = /^[0-9]+$/.test(valor);
+                let data;
+
+                if (soloDigitos) {
+                  const res = await fetch(
+                    `http://localhost:3000/producto/getToBarCode/${encodeURIComponent(valor)}`
+                  );
+
+                  if (res.status === 404) throw new Error("🔍 Código no encontrado");
+                  if (!res.ok) throw new Error("Error en el servidor");
+
+                  data = await res.json();
+                  setProductos([data]);
+                  table.setPageIndex(0);
+                } else {
+                  table.setGlobalFilter(valor);
+                }
+                setMensajeError("");
+              } catch (err) {
+                setMensajeError(err.message);
+                setCodigoBarraInput("");
+                const todos = await apiService.getProductos();
+                setProductos(todos);
+              }
+            }
+          }}
+    style={{
+      flex: 1,                // ocupa todo el espacio restante
+      border: "none",
+      outline: "none",
+      backgroundColor: "transparent",
+      fontSize: "18px",
+      color: "#333",
+    }}
+  />
+</div>
+         
         <button
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
