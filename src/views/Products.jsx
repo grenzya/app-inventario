@@ -251,7 +251,7 @@ function Productos() {
     barCodeId: null,
     titulo: ""
   });
-  const [codigoBarraInput, setCodigoBarraInput] = useState("");
+  
   const handleProductoGuardado = (productoActualizado) => {
   setProductos((prev) =>
     prev.map((p) =>
@@ -494,37 +494,13 @@ function Productos() {
       flexDirection: "column",
       overflow: "hidden"
     }}>
-      
-      <div style={{
-        padding: "15px 20px",
-        backgroundColor: "#f8f9fa",
-        borderBottom: "1px solid #dee2e6",
-        flexShrink: 0
-      }}>
-        <div style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center"
-        }}>
-          <h2 style={{ margin: 0, color: "#2e7d32" }}>
-            📦 Gestión de Productos ({productos.length})
-          </h2>
-          <div style={{ fontSize: "14px", color: "#6c757d" }}>
-            Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}
-            
-          </div>
-          
-        </div>
-        
-      </div>
-     
 
       <div style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        gap: "15px",
-        padding: "15px 20px",
+        gap: "20px",
+        borderRadius: "20px",
         backgroundColor: "#2e7d32",
         flexWrap: "wrap",
         flexShrink: 0,
@@ -574,13 +550,13 @@ function Productos() {
         {mensajeError && (
           <span style={{ color: "#ffeb3b", fontWeight: 600 }}>{mensajeError}</span>
         )}
-        <div style={{ color: "white", fontSize: "14px", fontWeight: "500" }}>
-          Mostrando {productos.length === 0 ? 0 : table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} - {" "}
-          {Math.min(
-            (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
-            productos.length
-          )} de {productos.length}
-        </div>
+      <div style={{ color: "white", marginRight: "40px", fontSize: "14px", fontWeight: "500" }}>
+        Mostrando {productos.length === 0 ? 0 : table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} - {" "}
+        {Math.min(
+          (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
+          productos.length
+        )} de {productos.length}
+      </div>
         
         <button
           onClick={() => table.setPageIndex(0)}
@@ -597,7 +573,7 @@ function Productos() {
             minWidth: "100px"
           }}
         >
-          ⏮️ Primera
+          Primera
         </button>
         
         <button
@@ -615,7 +591,7 @@ function Productos() {
             minWidth: "100px"
           }}
         >
-          ⬅️ Anterior
+          Anterior
         </button>
 
         <div style={{
@@ -646,7 +622,7 @@ function Productos() {
             minWidth: "100px"
           }}
         >
-          Siguiente ➡️
+          Siguiente
         </button>
         
         <button
@@ -664,7 +640,7 @@ function Productos() {
             minWidth: "100px"
           }}
         >
-          Última ⏭️
+          Última
         </button>
 
         <select
@@ -688,33 +664,39 @@ function Productos() {
         <button
         onClick={() => setModalAgregarVisible(true)}
         style={{
-          backgroundColor: "#231F21",
+          backgroundColor: "#66bb6a",
           color: "white",
-          padding: "10px 15px",
+          padding: "10px 10px",
           border: "none",
-          borderRadius: "6px",
+          marginLeft: "40px",
+          borderRadius: "30px",
           cursor: "pointer",
           fontSize: "14px",
           fontWeight: "bold"
         }}
       >
-        ➕ Agregar Producto
+        ➕
       </button>
       </div>
 
       <div style={{ 
         flex: 1, 
         overflow: "auto",
-        padding: "10px",
+        padding: "20px",
         minHeight: 0
       }}>
         <table
           style={{
             width: "100%",
             borderCollapse: "collapse",
-            background: "#49BA70",
-            borderRadius: "10px",
+            borderColor: "#ddd",
+            borderSpacing: 0,
+            background: "#FFFFFF",
+            borderRadius: "30px",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
             overflow: "hidden",
+            marginTop: "20px",
+            marginBottom: "100px",
           }}
         >
           <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
@@ -724,11 +706,13 @@ function Productos() {
                   <th
                     key={header.id}
                     style={{
-                      padding: "12px",
+                      padding: "15px 20px",
                       background: "#2e7d32",
                       color: "#fff",
                       textAlign: "left",
-                      borderBottom: "2px solid #fff",
+                      fontWeight: "bold",
+                      fontSize: "20px",
+                      width: "100%",
                     }}
                   >
                     {flexRender(
@@ -743,7 +727,10 @@ function Productos() {
           <tbody>
             {table.getRowModel().rows.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} style={{ textAlign: "center", padding: "40px" }}>
+                <td colSpan={columns.length} style={{ 
+                  textAlign: "center",
+                  padding: "40px",
+                   }}>
                   No hay productos para mostrar
                 </td>
               </tr>
@@ -754,18 +741,26 @@ function Productos() {
                   <tr
                     key={row.id}
                     style={{
-                      backgroundColor: isInactive ? "#ffebee" : "#e8f5e9", // rojo claro si está inactivo
-                      color: isInactive ? "#c62828" : "inherit",           // texto rojo si está inactivo
-                      fontWeight: isInactive ? "bold" : "normal"
+                      backgroundColor: isInactive ? "#ffebee" : "#F2F2F2",
+                      color: isInactive ? "#c62828" : "inherit",
+                      fontWeight: isInactive ? "bold" : "normal",
+                      boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.15)",
+                      borderRadius: "26px",
+                      overflow: "hidden",
                     }}
                   >
-                    {row.getVisibleCells().map((cell) => (
+                    {row.getVisibleCells().map((cell, cellIndex) => (
                       <td
                         key={cell.id}
                         style={{
-                          padding: "10px",
-                          borderBottom: "1px solid #c8e6c9",
+                          padding: "15px 20px",
+                          maxWidth: "200px",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          
                         }}
+                        title={flexRender(cell.column.columnDef.cell, cell.getContext())}
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>
