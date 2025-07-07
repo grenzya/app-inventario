@@ -4,7 +4,9 @@ import {
   getCoreRowModel,
   flexRender,
 } from "@tanstack/react-table";
-
+import {
+  MdInfo,
+} from "react-icons/md";
 function Suppliers() {
   const [proveedores] = useState([
     {
@@ -46,12 +48,13 @@ function Suppliers() {
             style={{
               background: "#0288d1",
               color: "white",
-              border: "none",
-              padding: "5px 8px",
-              borderRadius: "5px",
-            }}
-          >
-            i
+                            border: "none",
+                            padding: "10px",
+                            borderRadius: "20px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          <MdInfo size={30} />
           </button>
         ),
       },
@@ -73,9 +76,14 @@ function Suppliers() {
           style={{
             width: "100%",
             borderCollapse: "collapse",
-            background: "#49BA70",
-            borderRadius: "10px",
+            borderColor: "#ddd",
+            borderSpacing: 0,
+            background: "#FFFFFF",
+            borderRadius: "30px",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
             overflow: "hidden",
+            marginTop: "20px",
+            marginBottom: "100px",
           }}
         >
           <thead>
@@ -85,11 +93,13 @@ function Suppliers() {
                   <th
                     key={header.id}
                     style={{
-                      padding: "12px",
+                      padding: "15px 20px",
                       background: "#2e7d32",
                       color: "#fff",
                       textAlign: "left",
-                      borderBottom: "2px solid #fff",
+                      fontWeight: "bold",
+                      fontSize: "24px",
+                      width: "100%",
                     }}
                   >
                     {flexRender(
@@ -106,15 +116,24 @@ function Suppliers() {
               <tr
                 key={row.id}
                 style={{
-                  background: "#e8f5e9",
+                  backgroundColor: "#F2F2F2",
+                  color:"inherit",
+                  fontWeight: "normal",
+                  boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.15)",
+                  borderRadius: "26px",
+                  overflow: "hidden",
+                  fontSize: "20px",
                 }}
               >
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
                     style={{
-                      padding: "10px",
-                      borderBottom: "1px solid #c8e6c9",
+                      padding: "15px 20px",
+                      maxWidth: "200px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
                     }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

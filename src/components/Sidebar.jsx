@@ -49,9 +49,10 @@ function Sidebar({ isOpen, onClose }) {
               color: "#000000",
               boxShadow: "2px 2px 4px rgba(0,0,0,0.25)",
               fontWeight: "500",
+              fontSize: "24px",
             }}
           >
-            <FaHome style={{ marginRight: "10px" }} />
+            <FaHome style={{ marginRight: "10px", flexShrink: 0 }} />
             Inicio
           </NavLink>
         </li>
@@ -70,9 +71,10 @@ function Sidebar({ isOpen, onClose }) {
               color: "#000000",
               boxShadow: "2px 2px 4px rgba(0,0,0,0.25)",
               fontWeight: "500",
+              fontSize: "24px",
             }}
           >
-            <FaBoxes style={{ marginRight: "10px" }} />
+            <FaBoxes style={{ marginRight: "10px", flexShrink: 0 }} />
             Productos
           </NavLink>
         </li>
@@ -91,9 +93,13 @@ function Sidebar({ isOpen, onClose }) {
               color: "#000000",
               boxShadow: "2px 2px 4px rgba(0,0,0,0.25)",
               fontWeight: "500",
+              fontSize: "24px",
+              overflow: "hidden",         
+              whiteSpace: "nowrap",        
+              textOverflow: "ellipsis",
             }}
           >
-            <FaTruck style={{ marginRight: "10px" }} />
+            <FaTruck style={{ marginRight: "10px", flexShrink: 0 }} />
             Proveedores
           </NavLink>
         </li>
