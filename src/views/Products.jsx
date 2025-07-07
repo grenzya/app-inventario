@@ -2,14 +2,13 @@ import { useState, useMemo, useEffect } from "react";
 import EditarProductoModal from "@/components/editarProductoModal";
 import EliminarProductoModal from "@/components/eliminarProductoModal";
 import AgregarProductoModal from "@/components/agregarProducoModal";
-
-
-
 import {
+  getFilteredRowModel,
   useReactTable,
   getCoreRowModel,
   getPaginationRowModel,
   flexRender,
+
 } from "@tanstack/react-table";
 import Modal from "@/components/Modal";
 
@@ -39,106 +38,113 @@ const apiService = {
 function BarcodeModal({ visible, onClose, barCodeId, titulo }) {
   if (!visible) return null;
 
-  const imprimirCodigo = () => {
-    const printWindow = window.open('', '_blank');
-    
-    const htmlContent = `
-      <!DOCTYPE html>
-      <html lang="es">
-      <head>
-        <meta charset="UTF-8">
-        <title>Código de barras - ${titulo}</title>
-        <style>
-          body {
-            margin: 0;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+const imprimirCodigo = () => {
+  const printWindow = window.open('', '_blank');
+
+  const barcodeUrl = apiService.getSVGUrl(barCodeId);
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <title>Código de barras - ${titulo}</title>
+      <style>
+        body {
+          margin: 0;
+          padding: 20px;
+          font-family: Arial, sans-serif;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .print-area {
+          text-align: center;
+          margin: 20px 0;
+        }
+        .barcode-image {
+          width: 350px;
+          height: auto;
+          border: 1px solid #ddd;
+          padding: 10px;
+          margin: 10px 0;
+        }
+        .product-info {
+          font-size: 14px;
+          margin: 10px 0;
+          color: #333;
+        }
+        @media print {
+          body * {
+            visibility: hidden;
           }
-          
+          .print-area, .print-area * {
+            visibility: visible;
+          }
           .print-area {
-            text-align: center;
-            margin: 20px 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
           }
-          
-          .barcode-image {
-            width: 350px;
-            height: auto;
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin: 10px 0;
+          .no-print {
+            display: none !important;
           }
-          
-          .product-info {
-            font-size: 14px;
-            margin: 10px 0;
-            color: #333;
-          }
-          
-          @media print {
-            body * {
-              visibility: hidden;
-            }
-            .print-area, .print-area * {
-              visibility: visible;
-            }
-            .print-area {
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 100%;
-            }
-            .no-print {
-              display: none !important;
-            }
-          }
-          
-          .print-button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="no-print">
-          <button onclick="window.print()" class="print-button">🖨️ Imprimir</button>
-          <button onclick="window.close()" class="print-button" style="background-color: #f44336;">❌ Cerrar</button>
+        }
+        .print-button {
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 16px;
+          margin: 10px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="no-print">
+        <button onclick="window.print()" class="print-button">🖨️ Imprimir</button>
+        <button onclick="window.close()" class="print-button" style="background-color: #f44336;">❌ Cerrar</button>
+      </div>
+      <div class="print-area">
+        <div class="product-info">
+          <strong>${titulo}</strong>
         </div>
-        
-        <div class="print-area">
-          <div class="product-info">
-            <strong>${titulo}</strong>
-          </div>
-          <img 
-            src="${apiService.getSVGUrl(barCodeId)}" 
-            alt="Código de barras" 
-            class="barcode-image"
-          />
-          <div class="product-info">
-            Código: ${barCodeId}
-          </div>
+        <img 
+          id="barcode-img"
+          src="${barcodeUrl}" 
+          alt="Código de barras" 
+          class="barcode-image"
+        />
+        <div class="product-info">
+          Código: ${barCodeId}
         </div>
-      </body>
-      </html>
-    `;
-    
-    printWindow.document.write(htmlContent);
-    printWindow.document.close();
-    
-    printWindow.onload = () => {
-      setTimeout(() => {
-        printWindow.print();
-      }, 500);
+      </div>
+    </body>
+    </html>
+  `;
+
+  printWindow.document.write(htmlContent);
+  printWindow.document.close();
+
+  // Esperar a que cargue la imagen antes de imprimir
+  printWindow.onload = () => {
+    const img = printWindow.document.getElementById('barcode-img');
+    img.onload = () => {
+      printWindow.focus();
+      printWindow.print();
+    };
+    img.onerror = () => {
+      alert('⚠️ Error al cargar la imagen del código de barras');
+      printWindow.close();
     };
   };
+};
+
+
+
 
   return (
     <div
@@ -227,6 +233,7 @@ function BarcodeModal({ visible, onClose, barCodeId, titulo }) {
 }
 
 function Productos() {
+  const [globalFilter, setGlobalFilter] = useState("");
   const [modalAgregarVisible, setModalAgregarVisible] = useState(false);
   const [editModal, setEditModal] = useState({ visible: false, producto: null });
   const [modalEliminar, setModalEliminar] = useState({
@@ -275,7 +282,7 @@ function Productos() {
       { header: "Categoría", accessorKey: "categoria" },
       { header: "Marca", accessorKey: "marca" },
       { header: "País", accessorKey: "pais" },
-      { header: "Características", accessorKey: "caracteristicas" },
+      {header: "Proveedor", accessorKey: "proveedor_nombre"},
       {
         header: "Precio",
         accessorKey: "precio",
@@ -303,7 +310,7 @@ function Productos() {
             color: info.getValue() === 1 ? "green" : "red",
             fontWeight: "bold"
           }}>
-            {info.getValue() === 1 ? "Activo" : "Inactivo"}
+            {info.getValue() === 1 ? "Activo" : "Descontinuado"}
           </span>
         ),
       },
@@ -377,7 +384,7 @@ function Productos() {
             onClick={() => setBarcodeModal({
               visible: true,
               barCodeId: info.row.original.barCodeId,
-              titulo: `${info.row.original.nombre} (${info.row.original.codigoGuardad})`
+              titulo: `${info.row.original.nombre} (${info.row.original.barCodeId})`
             })}
             style={{
               background: "#43a047",
@@ -399,6 +406,16 @@ function Productos() {
   const table = useReactTable({
     data: productos,
     columns,
+    state: {
+      globalFilter,                     // ← aquí va tu useState
+      pagination: {
+        pageIndex: 0,
+        pageSize: 15,
+      },
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    getFilteredRowModel: getFilteredRowModel(),
+
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
@@ -474,7 +491,7 @@ function Productos() {
         </div>
         
       </div>
-      /*
+     
 
       <div style={{
         display: "flex",
@@ -487,7 +504,49 @@ function Productos() {
         flexShrink: 0,
         minHeight: "70px"
       }}>
-        
+         <input
+          type="text"
+          placeholder="🔍 Buscar producto..."
+          value={table.getState().globalFilter ?? ""}
+          onChange={(e) => table.setGlobalFilter(e.target.value)}
+          style={{
+            padding: "10px 15px",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            fontSize: "14px",
+            minWidth: "250px",
+            outline: "none"
+          }}
+        />
+        <input
+          type="text"
+          placeholder="🔍 Buscar por código de barras..."
+          value={codigoBarraInput}
+          onChange={(e) => setCodigoBarraInput(e.target.value)}
+          onKeyDown={async (e) => {
+            if (e.key === 'Enter') {
+              try {
+                const res = await fetch(`http://localhost:3000/producto/getToBarCode/${encodeURIComponent(codigoBarraInput)}`);
+                if (!res.ok) throw new Error("Producto no encontrado");
+                const producto = await res.json();
+                setProductos([producto]); // Muestra solo ese producto
+              } catch (err) {
+                alert(err.message);
+              }
+            }
+          }}
+          style={{
+            padding: "10px 15px",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            fontSize: "14px",
+            minWidth: "250px",
+            outline: "none"
+          }}
+        />
+
+
+
         <div style={{ color: "white", fontSize: "14px", fontWeight: "500" }}>
           Mostrando {productos.length === 0 ? 0 : table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} - {" "}
           {Math.min(
@@ -495,7 +554,7 @@ function Productos() {
             productos.length
           )} de {productos.length}
         </div>
-
+        
         <button
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
