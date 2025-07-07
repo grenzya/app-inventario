@@ -20,7 +20,7 @@ function Modal({ visible, title, data, onClose }) {
         style={{
           background: "#000000",
           padding: "30px",
-          borderRadius: "10px",
+          borderRadius: "40px",
           width: "400px",
           boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
         }}
@@ -53,11 +53,13 @@ function Modal({ visible, title, data, onClose }) {
           <button
             onClick={onClose}
             style={{
-              background: "#FFFFFF",
-              color: "#000000",
+              background: "#9e9e9e",
+              color: "#FFFF",
               border: "none",
-              borderRadius: "5px",
+              borderRadius: "10px",
+              padding: "15px 20px",
               cursor: "pointer",
+              fontSize: "20px",
             }}
           >
             Cerrar

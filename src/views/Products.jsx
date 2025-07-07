@@ -3,10 +3,8 @@ import EditarProductoModal from "@/components/editarProductoModal";
 import EliminarProductoModal from "@/components/eliminarProductoModal";
 import AgregarProductoModal from "@/components/agregarProducoModal";
 
-
-
 import {
-  getFilteredRowModel,  
+  getFilteredRowModel,
   useReactTable,
   getCoreRowModel,
   getPaginationRowModel,
@@ -26,7 +24,7 @@ import {
   MdInfo,
   MdClose,
   MdGridOn,
-  MdSearch 
+  MdSearch,
 } from "react-icons/md";
 const API_BASE_URL = "http://localhost:3000";
 
@@ -46,15 +44,15 @@ const apiService = {
 
   getSVGUrl(barCodeId) {
     return `${API_BASE_URL}/barCode/barcodeimage/${barCodeId}`;
-  }
+  },
 };
 
 function BarcodeModal({ visible, onClose, barCodeId, titulo }) {
   if (!visible) return null;
 
   const imprimirCodigo = () => {
-    const printWindow = window.open('', '_blank');
-    
+    const printWindow = window.open("", "_blank");
+
     const htmlContent = `
       <!DOCTYPE html>
       <html lang="es">
@@ -69,6 +67,7 @@ function BarcodeModal({ visible, onClose, barCodeId, titulo }) {
             display: flex;
             flex-direction: column;
             align-items: center;
+            background-color: #000;
           }
           
           .print-area {
@@ -81,13 +80,15 @@ function BarcodeModal({ visible, onClose, barCodeId, titulo }) {
             height: auto;
             border: 1px solid #ddd;
             padding: 10px;
+            border-radius: 20px;
             margin: 10px 0;
+            background-color: #fff;
           }
           
           .product-info {
-            font-size: 14px;
+            font-size: 24px;
             margin: 10px 0;
-            color: #333;
+            color: #FFFFFF;
           }
           
           @media print {
@@ -112,8 +113,8 @@ function BarcodeModal({ visible, onClose, barCodeId, titulo }) {
             background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 20px 25px;
+            border-radius: 20px;
             cursor: pointer;
             font-size: 16px;
             margin: 10px;
@@ -121,31 +122,30 @@ function BarcodeModal({ visible, onClose, barCodeId, titulo }) {
         </style>
       </head>
       <body>
-        <div class="no-print">
-          <button onclick="window.print()" class="print-button">🖨️ Imprimir</button>
-          <button onclick="window.close()" class="print-button" style="background-color: #f44336;">❌ Cerrar</button>
-        </div>
-        
         <div class="print-area">
           <div class="product-info">
             <strong>${titulo}</strong>
           </div>
-          <img 
-            src="${apiService.getSVGUrl(barCodeId)}" 
-            alt="Código de barras" 
-            class="barcode-image"
-          />
+            <img 
+              src="${apiService.getSVGUrl(barCodeId)}" 
+              alt="Código de barras" 
+              class="barcode-image"
+            />
           <div class="product-info">
             Código: ${barCodeId}
+          </div>
+          <div class="no-print">
+          <button onclick="window.print()" class="print-button">Imprimir</button>
+          <button onclick="window.close()" class="print-button" style="background-color: #f44336;">Cerrar</button>
           </div>
         </div>
       </body>
       </html>
     `;
-    
+
     printWindow.document.write(htmlContent);
     printWindow.document.close();
-    
+
     printWindow.onload = () => {
       setTimeout(() => {
         printWindow.print();
@@ -171,9 +171,9 @@ function BarcodeModal({ visible, onClose, barCodeId, titulo }) {
     >
       <div
         style={{
-          backgroundColor: "white",
+          backgroundColor: "#000000",
           padding: "30px",
-          borderRadius: "10px",
+          borderRadius: "30px",
           maxWidth: "90%",
           maxHeight: "90%",
           display: "flex",
@@ -183,55 +183,65 @@ function BarcodeModal({ visible, onClose, barCodeId, titulo }) {
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 style={{ margin: "0 0 20px 0", color: "#333", textAlign: "center" }}>
+        <h3
+          style={{
+            margin: "0 0 20px 0",
+            color: "#fff",
+            textAlign: "center",
+            fontSize: "24px",
+          }}
+        >
           {titulo}
         </h3>
-        
-        <div style={{ 
-          border: "2px solid #ddd", 
-          borderRadius: "5px", 
-          padding: "15px", 
-          backgroundColor: "#fafafa",
-          textAlign: "center"
-        }}>
+
+        <div
+          style={{
+            border: "2px solid #ddd",
+            borderRadius: "20px",
+            padding: "15px",
+            backgroundColor: "#fafafa",
+            textAlign: "center",
+          }}
+        >
           <img
             src={apiService.getSVGUrl(barCodeId)}
             alt={`Código de barras ${titulo}`}
             style={{
               width: "350px",
               height: "auto",
-              maxWidth: "100%"
+              maxWidth: "100%",
+              borderRadius: "10px",
             }}
           />
         </div>
-        
-        <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+
+        <div style={{ marginTop: "20px", display: "flex", gap: "40px" }}>
           <button
             onClick={imprimirCodigo}
             style={{
-              padding: "10px 20px",
+              padding: "20px 20px",
               backgroundColor: "#4CAF50",
               color: "white",
               border: "none",
-              borderRadius: "5px",
+              borderRadius: "15px",
               cursor: "pointer",
             }}
           >
-            <MdPrint size={20} />
+            Imprimir
           </button>
-          
+
           <button
             onClick={onClose}
             style={{
-              padding: "10px 20px",
-              backgroundColor: "#2196F3",
+              padding: "20px 20px",
+              backgroundColor: "#f44336",
               color: "white",
               border: "none",
-              borderRadius: "5px",
+              borderRadius: "15px",
               cursor: "pointer",
             }}
           >
-            <MdClose size={20} />
+            Cerrar
           </button>
         </div>
       </div>
@@ -243,11 +253,14 @@ function Productos() {
   const [codigoBarraInput, setCodigoBarraInput] = useState("");
   const [globalFilter, setGlobalFilter] = useState("");
   const [modalAgregarVisible, setModalAgregarVisible] = useState(false);
-  const [editModal, setEditModal] = useState({ visible: false, producto: null });
+  const [editModal, setEditModal] = useState({
+    visible: false,
+    producto: null,
+  });
   const [modalEliminar, setModalEliminar] = useState({
-  visible: false,
-  producto: null
-});
+    visible: false,
+    producto: null,
+  });
   const [mensajeError, setMensajeError] = useState("");
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -256,24 +269,25 @@ function Productos() {
   const [barcodeModal, setBarcodeModal] = useState({
     visible: false,
     barCodeId: null,
-    titulo: ""
+    titulo: "",
   });
   const handleProductoGuardado = (productoActualizado) => {
-  setProductos((prev) =>
-    prev.map((p) =>
-      p.productoId === productoActualizado.productoId ? productoActualizado : p
-    )
-  );
-};
+    setProductos((prev) =>
+      prev.map((p) =>
+        p.productoId === productoActualizado.productoId
+          ? productoActualizado
+          : p
+      )
+    );
+  };
   useEffect(() => {
     const cargarProductos = async () => {
       try {
         setLoading(true);
         setError(null);
-        
+
         const datos = await apiService.getProductos();
         setProductos(datos);
-        
       } catch (error) {
         setError(error.message);
       } finally {
@@ -285,22 +299,22 @@ function Productos() {
   }, []);
 
   useEffect(() => {
-  const cargarTodosLosProductos = async () => {
-    try {
-      const todos = await apiService.getProductos();
-      setProductos(todos);
-      table.setGlobalFilter("");
-      table.setPageIndex(0);
-      setMensajeError("");
-    } catch (error) {
-      setMensajeError("Error al cargar productos");
-    }
-  };
+    const cargarTodosLosProductos = async () => {
+      try {
+        const todos = await apiService.getProductos();
+        setProductos(todos);
+        table.setGlobalFilter("");
+        table.setPageIndex(0);
+        setMensajeError("");
+      } catch (error) {
+        setMensajeError("Error al cargar productos");
+      }
+    };
 
-  if (codigoBarraInput.trim() === "") {
-    cargarTodosLosProductos();
-  }
-}, [codigoBarraInput]);
+    if (codigoBarraInput.trim() === "") {
+      cargarTodosLosProductos();
+    }
+  }, [codigoBarraInput]);
 
   const columns = useMemo(
     () => [
@@ -333,10 +347,12 @@ function Productos() {
         header: "Estado",
         accessorKey: "estado",
         cell: (info) => (
-          <span style={{ 
-            color: info.getValue() === 1 ? "green" : "red",
-            fontWeight: "bold"
-          }}>
+          <span
+            style={{
+              color: info.getValue() === 1 ? "green" : "red",
+              fontWeight: "bold",
+            }}
+          >
             {info.getValue() === 1 ? "Activo" : "Inactivo"}
           </span>
         ),
@@ -360,27 +376,25 @@ function Productos() {
         ),
       },
       {
-        header:"Acciones",
-        cell:({row})=>{
-          const prod =row.original;
-          return(
-            <div style={{display:"flex",gap:"6px"}}>
-            
+        header: "Acciones",
+        cell: ({ row }) => {
+          const prod = row.original;
+          return (
+            <div style={{ display: "flex", gap: "6px" }}>
               <button
                 onClick={() => {
-                  setEditModal({ visible: true, producto: prod })
-                }
-              }
+                  setEditModal({ visible: true, producto: prod });
+                }}
                 style={{
                   background: "#ff9800",
                   color: "white",
-              border: "none",
-              padding: "10px",
-              borderRadius: "20px",
-              cursor: "pointer",
-            }}
-          >
-            <MdEdit size={30} />
+                  border: "none",
+                  padding: "10px",
+                  borderRadius: "20px",
+                  cursor: "pointer",
+                }}
+              >
+                <MdEdit size={30} />
               </button>
               <button
                 onClick={() =>
@@ -390,27 +404,28 @@ function Productos() {
                   background: "#e53935",
                   color: "white",
                   padding: "10px",
-              border: "none",
-              borderRadius: "20px",
-              cursor: "pointer",
-            }}
-          >
-            <MdDelete size={30} />
+                  border: "none",
+                  borderRadius: "20px",
+                  cursor: "pointer",
+                }}
+              >
+                <MdDelete size={30} />
               </button>
             </div>
-          )
-        }
-      }
-      ,
+          );
+        },
+      },
       {
         header: "Barcode",
         cell: (info) => (
           <button
-            onClick={() => setBarcodeModal({
-              visible: true,
-              barCodeId: info.row.original.barCodeId,
-              titulo: `${info.row.original.nombre} (${info.row.original.codigoGuardad})`
-            })}
+            onClick={() =>
+              setBarcodeModal({
+                visible: true,
+                barCodeId: info.row.original.barCodeId,
+                titulo: `${info.row.original.nombre} (${info.row.original.codigoGuardad})`,
+              })
+            }
             style={{
               background: "#43a047",
               color: "white",
@@ -432,7 +447,7 @@ function Productos() {
     data: productos,
     columns,
     state: {
-      globalFilter,                     // ← aquí va tu useState
+      globalFilter, // ← aquí va tu useState
     },
     onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
@@ -448,13 +463,15 @@ function Productos() {
 
   if (loading) {
     return (
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "center", 
-        alignItems: "center", 
-        height: "100%",
-        fontSize: "18px" 
-      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+          fontSize: "18px",
+        }}
+      >
         🔄 Cargando productos...
       </div>
     );
@@ -462,111 +479,117 @@ function Productos() {
 
   if (error) {
     return (
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "center", 
-        alignItems: "center", 
-        height: "100%",
-        flexDirection: "column",
-        color: "red" 
-      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+          flexDirection: "column",
+          color: "red",
+        }}
+      >
         <div>❌ Error al cargar productos</div>
         <div style={{ marginTop: "10px", fontSize: "14px" }}>{error}</div>
       </div>
     );
   }
-    
 
   return (
-        
-    <div style={{ 
-      padding: 0,
-      margin: 0,
-      height: "100vh",
-      width: "100vw",
-      display: "flex",
-      flexDirection: "column",
-    }}>
-
-      <div style={{
+    <div
+      style={{
+        padding: 0,
+        margin: 0,
+        height: "100vh",
+        width: "100vw",
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: "20px",
-        borderRadius: "20px",
-        backgroundColor: "#2e7d32",
-        flexWrap: "wrap",
-        flexShrink: 0,
-        minHeight: "70px",
-        padding: "20px",
-        margin: "0 20px",
-      }}>
+        flexDirection: "column",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "20px",
+          borderRadius: "20px",
+          backgroundColor: "#2e7d32",
+          flexWrap: "wrap",
+          flexShrink: 0,
+          minHeight: "70px",
+          padding: "20px",
+          margin: "0 20px",
+        }}
+      >
         <div
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",            // separación entre ícono e input
-    padding: "20px 25px",
-    borderRadius: "30px",
-    border: "1px solid #ccc",
-    backgroundColor: "#ffffff",
-    boxShadow: "0 2px 3px rgba(0,0,0,0.09)",
-    minWidth: "400git px",
-  }}
->
-  <MdSearch style={{ fontSize: "20px", color: "#555" }} />
-
-  <input
-    type="text"
-    placeholder="Ingresa una clave para buscar..."
-    value={codigoBarraInput}
-    onChange={(e) => {
-      setCodigoBarraInput(e.target.value);
-      setMensajeError("");
-    }}
-    onKeyDown={async (e) => {
-            if (e.key === "Enter") {
-              const valor = codigoBarraInput.trim();
-              if (valor === "") return;   
-
-              try {
-                const soloDigitos = /^[0-9]+$/.test(valor);
-                let data;
-
-                if (soloDigitos) {
-                  const res = await fetch(
-                    `http://localhost:3000/producto/getToBarCode/${encodeURIComponent(valor)}`
-                  );
-
-                  if (res.status === 404) throw new Error("🔍 Código no encontrado");
-                  if (!res.ok) throw new Error("Error en el servidor");
-
-                  data = await res.json();
-                  setProductos([data]);
-                  table.setPageIndex(0);
-                } else {
-                  table.setGlobalFilter(valor);
-                }
-                setMensajeError("");
-              } catch (err) {
-                setMensajeError(err.message);
-                setCodigoBarraInput("");
-                const todos = await apiService.getProductos();
-                setProductos(todos);
-              }
-            }
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px", // separación entre ícono e input
+            padding: "20px 25px",
+            borderRadius: "30px",
+            border: "1px solid #ccc",
+            backgroundColor: "#ffffff",
+            boxShadow: "0 2px 3px rgba(0,0,0,0.09)",
+            minWidth: "400git px",
           }}
-    style={{
-      flex: 1,                // ocupa todo el espacio restante
-      border: "none",
-      outline: "none",
-      backgroundColor: "transparent",
-      fontSize: "18px",
-      color: "#333",
-    }}
-  />
-</div>
-         
+        >
+          <MdSearch style={{ fontSize: "20px", color: "#555" }} />
+
+          <input
+            type="text"
+            placeholder="Ingresa una clave para buscar..."
+            value={codigoBarraInput}
+            onChange={(e) => {
+              setCodigoBarraInput(e.target.value);
+              setMensajeError("");
+            }}
+            onKeyDown={async (e) => {
+              if (e.key === "Enter") {
+                const valor = codigoBarraInput.trim();
+                if (valor === "") return;
+
+                try {
+                  const soloDigitos = /^[0-9]+$/.test(valor);
+                  let data;
+
+                  if (soloDigitos) {
+                    const res = await fetch(
+                      `http://localhost:3000/producto/getToBarCode/${encodeURIComponent(
+                        valor
+                      )}`
+                    );
+
+                    if (res.status === 404)
+                      throw new Error("🔍 Código no encontrado");
+                    if (!res.ok) throw new Error("Error en el servidor");
+
+                    data = await res.json();
+                    setProductos([data]);
+                    table.setPageIndex(0);
+                  } else {
+                    table.setGlobalFilter(valor);
+                  }
+                  setMensajeError("");
+                } catch (err) {
+                  setMensajeError(err.message);
+                  setCodigoBarraInput("");
+                  const todos = await apiService.getProductos();
+                  setProductos(todos);
+                }
+              }
+            }}
+            style={{
+              flex: 1, // ocupa todo el espacio restante
+              border: "none",
+              outline: "none",
+              backgroundColor: "transparent",
+              fontSize: "18px",
+              color: "#333",
+            }}
+          />
+        </div>
+
         <button
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
@@ -578,15 +601,15 @@ function Productos() {
             borderRadius: "6px",
             cursor: table.getCanPreviousPage() ? "pointer" : "not-allowed",
             color: "white",
-              border: "none",
-              padding: "10px",
-              borderRadius: "20px",
-              cursor: "pointer",
-            }}
-          >
-            <MdFirstPage size={30} />
+            border: "none",
+            padding: "10px",
+            borderRadius: "20px",
+            cursor: "pointer",
+          }}
+        >
+          <MdFirstPage size={30} />
         </button>
-        
+
         <button
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
@@ -598,26 +621,29 @@ function Productos() {
             borderRadius: "6px",
             cursor: table.getCanPreviousPage() ? "pointer" : "not-allowed",
             color: "white",
-              border: "none",
-              padding: "10px",
-              borderRadius: "20px",
-              cursor: "pointer",
-            }}
-          >
-            <MdArrowBack size={30} />
+            border: "none",
+            padding: "10px",
+            borderRadius: "20px",
+            cursor: "pointer",
+          }}
+        >
+          <MdArrowBack size={30} />
         </button>
 
-        <div style={{
-          color: "white",
-          fontSize: "20px",
-          fontWeight: "600",
-          padding: "15px",
-          backgroundColor: "rgba(255,255,255,0.2)",
-          borderRadius: "20px",
-          minWidth: "150px",
-          textAlign: "center"
-        }}>
-          Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}
+        <div
+          style={{
+            color: "white",
+            fontSize: "20px",
+            fontWeight: "600",
+            padding: "15px",
+            backgroundColor: "rgba(255,255,255,0.2)",
+            borderRadius: "20px",
+            minWidth: "150px",
+            textAlign: "center",
+          }}
+        >
+          Página {table.getState().pagination.pageIndex + 1} de{" "}
+          {table.getPageCount()}
         </div>
 
         <button
@@ -631,15 +657,15 @@ function Productos() {
             borderRadius: "6px",
             cursor: table.getCanNextPage() ? "pointer" : "not-allowed",
             color: "white",
-              border: "none",
-              padding: "10px",
-              borderRadius: "20px",
-              cursor: "pointer",
-            }}
-          >
-            <MdArrowForward size={30} />
+            border: "none",
+            padding: "10px",
+            borderRadius: "20px",
+            cursor: "pointer",
+          }}
+        >
+          <MdArrowForward size={30} />
         </button>
-        
+
         <button
           onClick={() => table.setPageIndex(table.getPageCount() - 1)}
           disabled={!table.getCanNextPage()}
@@ -651,13 +677,13 @@ function Productos() {
             borderRadius: "6px",
             cursor: table.getCanNextPage() ? "pointer" : "not-allowed",
             color: "white",
-              border: "none",
-              padding: "10px",
-              borderRadius: "20px",
-              cursor: "pointer",
-            }}
-          >
-            <MdLastPage size={30} />
+            border: "none",
+            padding: "10px",
+            borderRadius: "20px",
+            cursor: "pointer",
+          }}
+        >
+          <MdLastPage size={30} />
         </button>
 
         <select
@@ -668,7 +694,7 @@ function Productos() {
             borderRadius: "20px",
             border: "1px solid #ddd",
             fontSize: "20px",
-            fontWeight: "600"
+            fontWeight: "600",
           }}
         >
           {[10, 15, 20, 50].map((pageSize) => (
@@ -677,28 +703,30 @@ function Productos() {
             </option>
           ))}
         </select>
-        
+
         <button
-        onClick={() => setModalAgregarVisible(true)}
-        style={{
-          backgroundColor: "#66bb6a",
-          color: "white",
-              border: "none",
-              padding: "10px",
-              borderRadius: "20px",
-              cursor: "pointer",
-            }}
-          >
-            <MdAdd size={30} />
-      </button>
+          onClick={() => setModalAgregarVisible(true)}
+          style={{
+            backgroundColor: "#66bb6a",
+            color: "white",
+            border: "none",
+            padding: "10px",
+            borderRadius: "20px",
+            cursor: "pointer",
+          }}
+        >
+          <MdAdd size={30} />
+        </button>
       </div>
 
-      <div style={{ 
-        flex: 1, 
-        overflow: "auto",
-        padding: "20px",
-        minHeight: 0
-      }}>
+      <div
+        style={{
+          flex: 1,
+          overflow: "auto",
+          padding: "20px",
+          minHeight: 0,
+        }}
+      >
         <table
           style={{
             width: "100%",
@@ -741,11 +769,14 @@ function Productos() {
           <tbody>
             {table.getRowModel().rows.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} style={{ 
-                  textAlign: "center",
-                  padding: "40px",
-                  fontSize: "20px",
-                   }}>
+                <td
+                  colSpan={columns.length}
+                  style={{
+                    textAlign: "center",
+                    padding: "40px",
+                    fontSize: "20px",
+                  }}
+                >
                   No hay productos para mostrar
                 </td>
               </tr>
@@ -774,11 +805,16 @@ function Productos() {
                           overflow: "hidden",
                           textOverflow: "ellipsis",
                           whiteSpace: "nowrap",
-                          
                         }}
-                        title={flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        title={flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
                       >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
                       </td>
                     ))}
                   </tr>
@@ -794,12 +830,15 @@ function Productos() {
         onClose={() => setModalEliminar({ visible: false, producto: null })}
         onConfirm={async (productoId) => {
           try {
-            const res = await fetch(`http://localhost:3000/producto/eliminar/${productoId}`, {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
+            const res = await fetch(
+              `http://localhost:3000/producto/eliminar/${productoId}`,
+              {
+                method: "PATCH",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
 
             if (!res.ok) throw new Error("Error al actualizar");
 
@@ -839,7 +878,7 @@ function Productos() {
         data={selectedProduct || {}}
         onClose={() => setSelectedProduct(null)}
       />
-      
+
       <BarcodeModal
         visible={barcodeModal.visible}
         onClose={() => setBarcodeModal({ ...barcodeModal, visible: false })}
