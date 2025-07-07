@@ -1,60 +1,91 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo,useEffect  } from "react";
+import Modal from "@/components/Modal";
+import PaginationBar from "@/components/PaginationBar";
+
+
 import {
   useReactTable,
   getCoreRowModel,
   flexRender,
+  getPaginationRowModel,
+  getFilteredRowModel,
+  getSortedRowModel  
+
 } from "@tanstack/react-table";
 import {
   MdInfo,
 } from "react-icons/md";
+
+const API_BASE_URL = "http://localhost:3000";
+
+const apiService = {
+  async getProveedores() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/proveedor/all`);
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error al obtener productos:", error);
+      throw error;
+    }
+  }
+};
+
+
 function Suppliers() {
-  const [proveedores] = useState([
-    {
-      codigo: "SUP001",
-      nombre: "Ferretería Industrial",
-      pais: "Chile",
-      contacto: "Juan Pérez",
-      telefono: "+56 9 1234 5678",
-      correo: "juan@ferreteria.cl",
-      estado: "Activo",
-      informacion: "Proveedor de herramientas industriales",
-    },
-    {
-      codigo: "SUP002",
-      nombre: "Seguridad Max",
-      pais: "Perú",
-      contacto: "María López",
-      telefono: "+51 987 654 321",
-      correo: "maria@seguridadmax.pe",
-      estado: "Activo",
-      informacion: "Distribuidor de implementos de seguridad personal",
-    },
-  ]);
+  const [globalFilter, setGlobalFilter] = useState("");
+  const [proveedores, setProveedores] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        const datos = await apiService.getProveedores();
+        setProveedores(datos);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
 
   const columns = useMemo(
     () => [
-      { header: "Código", accessorKey: "codigo" },
+      { header: "Código", accessorKey: "proveedorId",sortingFn: (rowA, rowB) => {
+    const a = Number(rowA.original.proveedorId);
+    const b = Number(rowB.original.proveedorId);
+    return a - b;
+  } },
       { header: "Nombre", accessorKey: "nombre" },
+      {header:"Categoría", accessorKey:"categoria"},
+      {header:"Marca", accessorKey:"empresa"},
       { header: "País", accessorKey: "pais" },
+      {header:"Dirección", accessorKey:""},
       { header: "Contacto", accessorKey: "contacto" },
-      { header: "Teléfono", accessorKey: "telefono" },
+      { header: "Teléfono", accessorKey: "fono" },
       { header: "Correo", accessorKey: "correo" },
-      { header: "Estado", accessorKey: "estado" },
       {
         header: "Info",
         cell: (info) => (
           <button
-            onClick={() => alert(info.row.original.informacion)}
+            onClick={() => setSelectedProduct(info.row.original)}
             style={{
               background: "#0288d1",
               color: "white",
-                            border: "none",
-                            padding: "10px",
-                            borderRadius: "20px",
-                            cursor: "pointer",
-                          }}
-                        >
-                          <MdInfo size={30} />
+              border: "none",
+              padding: "10px",
+              borderRadius: "20px",
+              cursor: "pointer",
+            }}
+          >
+            <MdInfo size={30} />
           </button>
         ),
       },
@@ -65,12 +96,31 @@ function Suppliers() {
   const table = useReactTable({
     data: proveedores,
     columns,
+    state: {
+      globalFilter, 
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    getFilteredRowModel: getFilteredRowModel(), 
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(), 
+    initialState: {
+      pagination: {
+        pageIndex: 0,
+        pageSize: 10,
+      },
+      sorting: [{ id: "proveedorId", desc: false }]
+    },
+    globalFilterFn: "includesString"
   });
-
   return (
     <div style={{ height: "100vh",
-      width: "100vw", display: "flex", flexDirection: "column" }}>
+      width: "100vw", display: "flex", flexDirection: "column"}}>
+       <div style={{ width: "100%", padding: "20px 0", display: "flex", justifyContent: "center" }}>
+        
+        <PaginationBar table={table} total={proveedores.length} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
+      </div>
+
       <div style={{ flex: 1, overflow: "auto" }}>
         <table
           style={{
@@ -144,6 +194,13 @@ function Suppliers() {
           </tbody>
         </table>
       </div>
+      <Modal
+        visible={!!selectedProduct}
+        title="Información"
+        data={selectedProduct || {}}
+        onClose={() => setSelectedProduct(null)}
+      />
+      
     </div>
   );
 }
